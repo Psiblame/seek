@@ -4,7 +4,8 @@
   if (!question) return alert("❌ Вопрос не найден на странице");
 
   // 🔹 Отправляем на свой сервер
-  const res = await fetch("https://ТВОЙ-СЕРВЕР.repl.co/api/gpt", {
+  const res = await fetch("https://deepseek-server.psiblame.repl.co/api/gpt
+", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question })
