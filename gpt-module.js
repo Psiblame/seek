@@ -1,29 +1,33 @@
 (async () => {
-  const question = document.querySelector('.question')?.innerText || prompt("Вопрос:");
+  // 🔹 Считываем текст вопроса с сайта
+  const question = document.querySelector('.question')?.innerText;
+  if (!question) return alert("❌ Вопрос не найден на странице");
 
-  if (!question) return alert("Вопрос не найден");
-
-  const res = await fetch("https://<твоё-имя>.repl.co/api/gpt", {
+  // 🔹 Отправляем на свой сервер
+  const res = await fetch("https://ТВОЙ-СЕРВЕР.repl.co/api/gpt", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question })
   });
 
   const data = await res.json();
+  const answer = data.answer;
 
-  const bubble = document.createElement("div");
-  bubble.textContent = "Ответ: " + data.answer;
-  Object.assign(bubble.style, {
-    position: "fixed",
-    bottom: "20px",
-    right: "20px",
-    background: "#222",
-    color: "#fff",
-    padding: "10px 15px",
-    borderRadius: "10px",
-    fontSize: "20px",
-    fontFamily: "monospace",
-    zIndex: 9999
+  // 🔹 Ищем варианты A/B/C/D и подсвечиваем правильный
+  const answerOptions = document.querySelectorAll('.answer, .option, label');
+  let found = false;
+
+  answerOptions.forEach(option => {
+    if (option.innerText.trim().startsWith(answer)) {
+      option.style.background = "#4caf50";
+      option.style.color = "white";
+      option.style.borderRadius = "8px";
+      option.style.padding = "4px";
+      found = true;
+    }
   });
-  document.body.appendChild(bubble);
+
+  if (!found) {
+    alert("✅ Ответ: " + answer);
+  }
 })();
